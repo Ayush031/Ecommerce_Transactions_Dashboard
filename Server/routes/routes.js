@@ -4,6 +4,7 @@ import { Product } from "../models/product.model.js";
 
 const router = express.Router();
 let data;
+const backendURL = 'https://transactecom.vercel.app';
 
 axios
     .get('https://s3.amazonaws.com/roxiler.com/product_transaction.json')
@@ -157,10 +158,10 @@ router
             const monthName = req.query.monthName;
 
             const [transactions, statistics, chartstats, piechartstats] = await Promise.all([
-                axios.get(`http://localhost:3000/api/transactions?monthName=${monthName}&page=${page}&limit=${limit}`),
-                axios.get(`http://localhost:3000/api/statistics?monthName=${monthName}`),
-                axios.get(`http://localhost:3000/api/chartstats?monthName=${monthName}`),
-                axios.get(`http://localhost:3000/api/piechartstats?monthName=${monthName}`),
+                axios.get(`${backendURL}/api/transactions?monthName=${monthName}&page=${page}&limit=${limit}`),
+                axios.get(`${backendURL}/api/statistics?monthName=${monthName}`),
+                axios.get(`${backendURL}/api/chartstats?monthName=${monthName}`),
+                axios.get(`${backendURL}/api/piechartstats?monthName=${monthName}`),
             ]);
 
             const combinedResponse = {
