@@ -6,8 +6,8 @@ import path from "path"
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      '/api': 'https://transactecom.vercel.app',
+    proxy: {      
+      '/api': 'http://localhost:3000',
     }
   },
   resolve: {
