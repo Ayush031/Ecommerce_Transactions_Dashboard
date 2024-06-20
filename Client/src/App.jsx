@@ -64,6 +64,7 @@ function App() {
       )
       .then((response) => {
         const data = response.data;
+        console.log(data);
         setCombineData(data);
         setStats(data.statistics);
         setChartstats(data.chartstats);
