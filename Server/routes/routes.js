@@ -4,8 +4,7 @@ import { Product } from "../models/product.model.js";
 
 const router = express.Router();
 let data;
-// const backendURL = 'https://transactecom.vercel.app' || 'http://localhost:3000' || 'https://apidash.vercel.app';
-const backendURL = 'http://localhost:3000';
+const backendURL = 'https://transactecom.vercel.app';
 
 axios
     .get('https://s3.amazonaws.com/roxiler.com/product_transaction.json')

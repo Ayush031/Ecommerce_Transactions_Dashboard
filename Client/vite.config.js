@@ -7,8 +7,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:3000'
-      // ,'https://apidash.vercel.app/','https://transactecom.vercel.app'],
+      '/api': 'https://transactecom.vercel.app',
     }
   },
   resolve: {
