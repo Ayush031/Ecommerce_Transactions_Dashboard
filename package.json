@@ -1,0 +1,13 @@
+{
+  "name": "ecommerce_transactions_dashboard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "cd server && npm start",
+    "client": "cd client && npm run dev"
+  },
+  "keywords": [],
+  "author": "Ayush Kansal",
+  "license": "ISC",
+  "description": "This is e-commerce transactions dashboard built using Express.js, MongoDB, and React . It allows users to view transactions, fetched from a API, for a specific month, filter transactions by month, and display statistics for the selected month. The dashboard also includes a bar chart and a pie chart to visualize the data."
+}
