@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import router from "./routes/routes.js";
-import connectDB from "./db/connection.js";
+// import connectDB from "./db/connection.js";
 
 dotenv.config({ path: './.env' });
 // connectDB();

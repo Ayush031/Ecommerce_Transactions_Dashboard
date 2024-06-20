@@ -39,10 +39,6 @@ function App() {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    // filterTransactionsByMonth(monthName);
-    // getStatisticsForMonth(monthName);
-    // getChartStats(monthName);
-    // getPieChartStats(monthName);
     getCombineData(monthName, page, perPage);
   }, [monthName, page, perPage]);
 
