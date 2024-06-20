@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {      
-      '/api': 'https://ecom-vercel-test.vercel.app',
+      '/api': 'https://ecom-vercel-test-client.vercel.app',
     }
   },
   resolve: {
