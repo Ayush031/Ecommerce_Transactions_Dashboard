@@ -4,9 +4,9 @@ import { Product } from "../models/product.model.js";
 
 const router = express.Router();
 let data;
+// const backendURL = 'http://localhost:3000';
+const backendURL = 'https://ecom-vercel-test.vercel.app';
 
-// const backendURL = process.env.BASE_URL;
-const backendURL = 'http://localhost:3000';
 
 axios
     .get('https://s3.amazonaws.com/roxiler.com/product_transaction.json')
