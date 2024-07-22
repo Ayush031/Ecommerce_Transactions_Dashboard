@@ -16,7 +16,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 app.use('/api', router);
-
+// app.use(cors({
+//     origin: ['https://ecom-vercel-test-client.vercel.app/api', 'http://localhost:3000'],
+// }));
 app.get('/', (req, res) => res.send('Server Started'));
 
 app.listen(PORT, () => {

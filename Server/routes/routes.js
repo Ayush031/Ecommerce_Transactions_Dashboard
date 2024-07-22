@@ -157,10 +157,10 @@ router
             const monthName = req.query.monthName;
 
             const [transactions, statistics, chartstats, piechartstats] = await Promise.all([
-                axios.get(`http://localhost:3000/api/transactions?monthName=${monthName}&page=${page}&limit=${limit}`),
-                axios.get(`http://localhost:3000/api/statistics?monthName=${monthName}`),
-                axios.get(`http://localhost:3000/api/chartstats?monthName=${monthName}`),
-                axios.get(`http://localhost:3000/api/piechartstats?monthName=${monthName}`),
+                axios.get(`https://ecom-vercel-test-server.vercel.app/api/transactions?monthName=${monthName}&page=${page}&limit=${limit}`),
+                axios.get(`https://ecom-vercel-test-server.vercel.app/api/statistics?monthName=${monthName}`),
+                axios.get(`https://ecom-vercel-test-server.vercel.app/api/chartstats?monthName=${monthName}`),
+                axios.get(`https://ecom-vercel-test-server.vercel.app/api/piechartstats?monthName=${monthName}`),
             ]);
 
             const combinedResponse = {
