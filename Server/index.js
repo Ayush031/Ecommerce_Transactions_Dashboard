@@ -4,7 +4,7 @@ import router from "./routes/routes.js";
 import connectDB from "./db/connection.js";
 
 dotenv.config({ path: './.env' });
-// connectDB(); // modify .env and then Uncomment this line to connect to the database
+connectDB(); // modify .env and then Uncomment this line to connect to the database
 
 const app = express();
 const PORT = process.env.PORT || 5000;
