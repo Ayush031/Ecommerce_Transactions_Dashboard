@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'https://ecom-vercel-test.vercel.app',
+      '/api': 'https://ecommerce-transactions-backend.vercel.app',
     }
   },
   resolve: {

@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import router from "./routes/routes.js";
@@ -12,6 +13,8 @@ const PORT = VITE_PORT || 5000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
 app.use('/api', router);
 
 app.get('/', (req, res) => res.send('Server Started'));
