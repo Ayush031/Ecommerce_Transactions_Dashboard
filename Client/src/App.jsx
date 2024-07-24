@@ -60,7 +60,7 @@ function App() {
   function getCombineData(monthName, page, perPage) {
     axios
       .get(
-        `https://ecom-vercel-test-server.vercel.app/api/combined?monthName=${monthName}&page=${page}&perPage=${perPage}`
+        `/api/combined?monthName=${monthName}&page=${page}&perPage=${perPage}`
       )
       .then((response) => {
         if (!response) {
