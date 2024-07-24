@@ -5,7 +5,7 @@ import { Product } from "../models/product.model.js";
 const router = express.Router();
 let data;
 
-const backendURL = "https://ecom-vercel-test-server.vercel.app";
+const backendURL = "https://ecommerce-transactions-backend.vercel.app";
 
 axios
     .get('https://s3.amazonaws.com/roxiler.com/product_transaction.json')

@@ -5,9 +5,13 @@ import path from "path"
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {      
-      '/api': 'https://ecom-vercel-test-server.vercel.app',
-    }
+    proxy: {
+      '/api': {
+        target: 'https://ecommerce-transactions-backend.vercel.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
   resolve: {
     alias: {
