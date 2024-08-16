@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-    origin: ['https://ecommerce-transactions-backend.vercel.app', 'http://localhost:3000'],
+    origin: ['https://ecommerce-transactions-frontend.vercel.app', 'http://localhost:5173'],
 }));
 app.use('/api', router);
 
