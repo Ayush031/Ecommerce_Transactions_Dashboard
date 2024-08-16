@@ -37,12 +37,8 @@ function App() {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [query, setQuery] = useState("");
-
+  const [responseStatus, setresponseStatus] = useState(false);
   useEffect(() => {
-    // filterTransactionsByMonth(monthName);
-    // getStatisticsForMonth(monthName);
-    // getChartStats(monthName);
-    // getPieChartStats(monthName);
     getCombineData(monthName, page, perPage);
   }, [monthName, page, perPage]);
 
@@ -67,15 +63,22 @@ function App() {
         `/api/combined?monthName=${monthName}&page=${page}&perPage=${perPage}`
       )
       .then((response) => {
-        const data = response.data;
-        setCombineData(data);
-        setStats(data.statistics);
-        setChartstats(data.chartstats);
-        setTransactions(data.transactions);
-        const updatedLabels = data.piechartstats.map((entry) => entry.category);
-        const updatedValues = data.piechartstats.map((entry) => entry.count);
-        setLabels(updatedLabels);
-        setValues(updatedValues);
+        if (!response) {
+          setresponseStatus(false);
+        } else {
+          const data = response.data;
+          setCombineData(data);
+          setStats(data.statistics);
+          setChartstats(data.chartstats);
+          setTransactions(data.transactions);
+          const updatedLabels = data.piechartstats.map(
+            (entry) => entry.category
+          );
+          const updatedValues = data.piechartstats.map((entry) => entry.count);
+          setLabels(updatedLabels);
+          setValues(updatedValues);
+          setresponseStatus(true);
+        }
       })
       .catch((error) => {
         console.error("\nFrontend Error in CombineData: ", error);
@@ -162,7 +165,7 @@ function App() {
 
   return (
     <>
-      <div className="text-gray-100 bg-slate-800 h-full p-5 flex flex-col items-center">
+      <div className="text-gray-100 bg-slate-800 min-h-screen p-5 flex flex-col items-center">
         <h1 className="text-center text-2xl font-semibold p-5 py-4 border rounded-full mt-5 mb-10 ">
           <span>
             {monthName} Transactions{" -> "}
@@ -205,129 +208,138 @@ function App() {
         <h1 className="my-5 mt-10 px-5 py-2 text-center text-2xl border rounded-full">
           <span>Transactions Dashboard</span>
         </h1>
-        <div>
-          <div className="flex justify-between my-3 px-10 text-slate-800">
-            <div className="bg-gray-200 py-2 px-5 rounded-3xl">
-              Page No. {page}
-            </div>
+        {!responseStatus && transactions.length == 0 ? (
+          <h1 className="text-3xl ">Loading Transaction . . .</h1>
+        ) : (
+          <>
             <div>
-              <button
-                className={`bg-gray-200 py-2 px-5 rounded-3xl hover:bg-gray-200/[0.87] active:scale-[0.97] ${
-                  page < transactions.length / visibleTransactionsCount
-                    ? ""
-                    : "cursor-not-allowed opacity-50 active:scale-[1]"
-                }  `}
-                onClick={() => selectPageHandler(page - 1)}
+              <div className="flex justify-between my-3 px-10 text-slate-800">
+                <div className="bg-gray-200 py-2 px-5 rounded-3xl">
+                  Page No. {page}
+                </div>
+                <div>
+                  <button
+                    className={`bg-gray-200 py-2 px-5 rounded-3xl hover:bg-gray-200/[0.87] active:scale-[0.97] ${
+                      page < transactions.length / visibleTransactionsCount
+                        ? ""
+                        : "cursor-not-allowed opacity-50 active:scale-[1]"
+                    }  `}
+                    onClick={() => selectPageHandler(page - 1)}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-gray-200 font-extrabold text-xl">
+                    {" - "}
+                  </span>
+                  <button
+                    onClick={() => selectPageHandler(page + 1)}
+                    className={`bg-gray-200 py-2 px-5 rounded-3xl hover:bg-gray-200/[0.87] active:scale-[0.97] ${
+                      page < transactions.length / visibleTransactionsCount
+                        ? ""
+                        : "cursor-not-allowed opacity-50 active:scale-[1]"
+                    } `}
+                  >
+                    Next
+                  </button>
+                </div>
+                <div className="bg-gray-200 py-2 px-5 rounded-3xl">
+                  PerPage : {perPage}
+                </div>
+              </div>
+              <table
+                border="2"
+                className="rounded-3xl w-full border-collapse border-spacing-6 text-justify bg-orange-300 text-slate-800"
               >
-                Previous
-              </button>
-              <span className="text-gray-200 font-extrabold text-xl">
-                {" - "}
-              </span>
-              <button
-                onClick={() => selectPageHandler(page + 1)}
-                className={`bg-gray-200 py-2 px-5 rounded-3xl hover:bg-gray-200/[0.87] active:scale-[0.97] ${
-                  page < transactions.length / visibleTransactionsCount
-                    ? ""
-                    : "cursor-not-allowed opacity-50 active:scale-[1]"
-                } `}
-              >
-                Next
-              </button>
+                <thead>
+                  <tr className="w-full">
+                    {tableHeaders.map((transaction) => {
+                      return (
+                        <th
+                          className={` border border-2 p-3 border-slate-800 rounded-full`}
+                          key={transaction}
+                        >
+                          {transaction}
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </thead>
+                {transactions.length > 0 && (
+                  <tbody>
+                    {transactions
+                      .slice(
+                        page * visibleTransactionsCount -
+                          visibleTransactionsCount,
+                        page * visibleTransactionsCount
+                      )
+                      .filter((item) => {
+                        return query.toLowerCase() === ""
+                          ? item
+                          : item.title.toLowerCase().includes(query) ||
+                              item.description.toLowerCase().includes(query) ||
+                              item.price.toString().includes(query);
+                      })
+                      .map((transaction) => {
+                        return (
+                          <tr key={transaction.id}>
+                            <td className=" p-4 border border-slate-800 border-2">
+                              {transaction.id}
+                            </td>
+                            <td className=" p-4 border border-slate-800 border-2">
+                              {transaction.title}
+                            </td>
+                            <td className=" p-4 border border-slate-800 border-2">
+                              {transaction.description}
+                            </td>
+                            <td className=" p-4 border border-slate-800 border-2">
+                              {transaction.price}
+                            </td>
+                            <td className=" p-4 border border-slate-800 border-2">
+                              {transaction.category}
+                            </td>
+                            <td className=" p-4 border border-slate-800 border-2">
+                              {transaction.sold ? "Out of Stock" : "In Stock"}
+                            </td>
+                            <td className=" p-4 border border-slate-800 border-2">
+                              <img
+                                src={transaction.image}
+                                className="h-20 rounded-2xl object-contain"
+                              />
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                )}
+              </table>
             </div>
-            <div className="bg-gray-200 py-2 px-5 rounded-3xl">
-              PerPage : {perPage}
+            <div className=" h-fit mt-10 bg-orange-300 p-5 text-slate-800 rounded-3xl">
+              <h1 className="font-bold mb-4 text-3xl">
+                Statistics - {monthName}
+              </h1>
+              <div className="flex gap-5 text-lg ">
+                <div>
+                  <p className="font-medium">Total Sale:</p>
+                  <p className="font-medium">Total sold items:</p>
+                  <p className="font-medium">Total not sold item:</p>
+                </div>
+                <div>
+                  <p>{stats.monthlySale}</p>
+                  <p>{stats.monthlySaleUnits}</p>
+                  <p>{stats.monthlyNotSoldUnits}</p>
+                </div>
+              </div>
             </div>
-          </div>
-          <table
-            border="2"
-            className="rounded-3xl w-full border-collapse border-spacing-6 text-justify bg-orange-300 text-slate-800"
-          >
-            <thead>
-              <tr className="w-full">
-                {tableHeaders.map((transaction) => {
-                  return (
-                    <th
-                      className={` border border-2 p-3 border-slate-800 rounded-full`}
-                      key={transaction}
-                    >
-                      {transaction}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            {transactions.length > 0 && (
-              <tbody>
-                {transactions
-                  .slice(
-                    page * visibleTransactionsCount - visibleTransactionsCount,
-                    page * visibleTransactionsCount
-                  )
-                  .filter((item) => {
-                    return query.toLowerCase() === ""
-                      ? item
-                      : item.title.toLowerCase().includes(query) ||
-                          item.description.toLowerCase().includes(query) ||
-                          item.price.toString().includes(query);
-                  })
-                  .map((transaction) => {
-                    return (
-                      <tr key={transaction.id}>
-                        <td className=" p-4 border border-slate-800 border-2">
-                          {transaction.id}
-                        </td>
-                        <td className=" p-4 border border-slate-800 border-2">
-                          {transaction.title}
-                        </td>
-                        <td className=" p-4 border border-slate-800 border-2">
-                          {transaction.description}
-                        </td>
-                        <td className=" p-4 border border-slate-800 border-2">
-                          {transaction.price}
-                        </td>
-                        <td className=" p-4 border border-slate-800 border-2">
-                          {transaction.category}
-                        </td>
-                        <td className=" p-4 border border-slate-800 border-2">
-                          {transaction.sold ? "Out of Stock" : "In Stock"}
-                        </td>
-                        <td className=" p-4 border border-slate-800 border-2">
-                          <img
-                            src={transaction.image}
-                            className="h-20 rounded-2xl object-contain"
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            )}
-          </table>
-        </div>
-        <div className=" h-fit mt-10 bg-orange-300 p-5 text-slate-800 rounded-3xl">
-          <h1 className="font-bold mb-4 text-3xl">Statistics - {monthName}</h1>
-          <div className="flex gap-5 text-lg ">
-            <div>
-              <p className="font-medium">Total Sale:</p>
-              <p className="font-medium">Total sold items:</p>
-              <p className="font-medium">Total not sold item:</p>
+            <div className="flex gap-20 my-10 w-3/4 item-center justify-center">
+              <div className="p-3 bg-gray-100 flex items-center justify-center w-2/4 rounded-3xl">
+                <Bar data={data} options={options} />
+              </div>
+              <div>
+                <Pie data={pieChartDataJson} />
+              </div>
             </div>
-            <div>
-              <p>{stats.monthlySale}</p>
-              <p>{stats.monthlySaleUnits}</p>
-              <p>{stats.monthlyNotSoldUnits}</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex gap-20 my-10 w-3/4 item-center justify-center">
-          <div className="p-3 bg-gray-100 flex items-center justify-center w-2/4 rounded-3xl">
-            <Bar data={data} options={options} />
-          </div>
-          <div>
-            <Pie data={pieChartDataJson} />
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </>
   );
